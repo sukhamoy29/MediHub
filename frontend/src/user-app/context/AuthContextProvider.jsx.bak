@@ -1,0 +1,192 @@
+import { AuthContext } from "./AuthContext";
+import { useState, useEffect } from "react";
+import PropTypes from "prop-types";
+import axios from "axios";
+
+export const AuthProvider = ({ children }) => {
+  const [user, setUser] = useState(null);
+  const [isLoggedIn, setIsLoggedIn] = useState(false);
+  const [loading, setLoading] = useState(true);
+  useEffect(() => {
+    const initAuth = async () => {
+      const storedUser = localStorage.getItem("user");
+      const accessToken = localStorage.getItem("access_token");
+      
+      if (!accessToken) {
+        setUser(null);
+        setIsLoggedIn(false);
+        setLoading(false);
+        return;
+      }
+
+      if (storedUser) {
+        try {
+          // Verify the token is still valid by making a request to the backend
+          const response = await axios.get("http://localhost:8000/auth/me", {
+            headers: {
+              Authorization: `Bearer ${accessToken}`
+            }
+          });
+
+          const parsedUser = JSON.parse(storedUser);
+          if (
+            response.data && 
+            response.data.id && 
+            typeof response.data.id === "number" && 
+            response.data.id > 0
+          ) {
+            setUser({ ...parsedUser, access_token: accessToken });
+            setIsLoggedIn(true);
+          } else {
+            // Invalid server response, clear auth state
+            localStorage.removeItem("user");
+            localStorage.removeItem("access_token");
+            setUser(null);
+            setIsLoggedIn(false);
+          }
+        } catch (error) {
+          // Token validation failed, clear auth state
+          console.error("Auth token validation failed:", error);
+          localStorage.removeItem("user");
+          localStorage.removeItem("access_token");
+          setUser(null);
+          setIsLoggedIn(false);
+        }
+      } else if (accessToken) {
+        // We have a token but no user data, try to fetch user info
+        try {
+          const response = await axios.get("http://localhost:8000/auth/me", {
+            headers: {
+              Authorization: `Bearer ${accessToken}`
+            }
+          });
+          
+          if (response.data && response.data.id) {
+            const userData = {
+              ...response.data,
+              access_token: accessToken,
+              redirectUrl: response.data.role.toLowerCase() === "patient" ? "/dashboard" : "/admin/dashboard"
+            };
+            setUser(userData);
+            setIsLoggedIn(true);
+            localStorage.setItem("user", JSON.stringify(userData));
+          }
+        } catch (error) {
+          console.error("Failed to fetch user data:", error);
+          localStorage.removeItem("access_token");
+          setUser(null);
+          setIsLoggedIn(false);
+        }
+      }
+      setLoading(false);
+    };
+
+    initAuth();
+          return;
+        } else {
+          // Invalid user id, clear storage and reset state
+          localStorage.removeItem("user");
+          localStorage.removeItem("access_token");
+          setUser(null);
+          setIsLoggedIn(false);
+          setLoading(false);
+          return;
+        }
+      }
+      // If no valid user data but access token exists, try to fetch user info
+      const fetchUserInfo = async () => {
+        try {
+          const response = await axios.get("http://localhost:8000/auth/me", {
+            headers: {
+              Authorization: `Bearer ${accessToken}`,
+            },
+          });
+          if (
+            response.data &&
+            response.data.id &&
+            typeof response.data.id === "number" &&
+            response.data.id > 0
+          ) {
+            // Include access_token in user state
+            setUser({ ...response.data, access_token: accessToken });
+            setIsLoggedIn(true);
+            localStorage.setItem("user", JSON.stringify(response.data));
+          } else {
+            localStorage.removeItem("access_token");
+            localStorage.removeItem("user");
+            setUser(null);
+            setIsLoggedIn(false);
+          }
+        } catch {
+          localStorage.removeItem("access_token");
+          localStorage.removeItem("user");
+          setUser(null);
+          setIsLoggedIn(false);
+        } finally {
+          setLoading(false);
+        }
+      };
+      fetchUserInfo();
+    } else {
+      // No access token, clear user state
+      localStorage.removeItem("user");
+      setUser(null);
+      setIsLoggedIn(false);
+      setLoading(false);
+    }
+  }, []);
+
+  const login = async (userData, accessToken) => {
+    if (!userData.id) {
+      console.error("Missing user ID in login data");
+      return;
+    }
+    // Add role-specific redirect URLs
+    const roleRedirects = {
+      patient: "/dashboard",
+      clinic: "/admin/dashboard",
+      doctor: "/admin/dashboard",
+    };
+    try {
+      // Use the passed accessToken instead of fetching again
+      const response = await axios.get("http://localhost:8000/auth/me", {
+        headers: {
+          Authorization: `Bearer ${accessToken}`,
+        },
+      });
+      if (response.data && response.data.id) {
+        const enhancedUserData = {
+          ...response.data,
+          access_token: accessToken,
+          redirectUrl: roleRedirects[response.data.role.toLowerCase()],
+        };
+        localStorage.setItem("user", JSON.stringify(enhancedUserData));
+        localStorage.setItem("access_token", accessToken);
+        setUser(enhancedUserData);
+        setIsLoggedIn(true);
+      } else {
+        console.error("Failed to fetch user profile after login");
+      }
+    } catch (error) {
+      console.error("Error fetching user profile after login:", error);
+    }
+  };
+
+  const logout = () => {
+    console.log("AuthProvider logout called");
+    localStorage.removeItem("user");
+    localStorage.removeItem("access_token");
+    setUser(null);
+    setIsLoggedIn(false);
+  };
+
+  return (
+    <AuthContext.Provider value={{ user, login, logout, isLoggedIn, loading }}>
+      {children}
+    </AuthContext.Provider>
+  );
+};
+
+AuthProvider.propTypes = {
+  children: PropTypes.node.isRequired,
+};

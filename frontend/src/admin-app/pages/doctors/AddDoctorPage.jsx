@@ -1,0 +1,233 @@
+import { useState } from "react";
+import PropTypes from "prop-types";
+// import { useNavigate } from "react-router-dom";
+import { toast, ToastContainer } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
+
+const AddDoctor = ({ onClose, onDoctorAdded }) => {
+  // Removed navigate since we will use onDoctorAdded callback
+  const [formData, setFormData] = useState({
+    name: "",
+    specialty: "",
+    contact: "",
+    phone: "",
+    status: "Active",
+    patients: "",
+    years: "",
+    availability: "",
+    bio: "",
+  });
+
+  const handleChange = (e) => {
+    setFormData({ ...formData, [e.target.name]: e.target.value });
+  };
+
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+
+    if (!formData.name || !formData.specialty || !formData.contact) {
+      alert("Please fill in all required fields.");
+      return;
+    }
+
+    try {
+      const token = localStorage.getItem("access_token");
+      const response = await fetch("http://localhost:8000/api/doctors", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${token}`,
+        },
+        body: JSON.stringify({
+          name: formData.name,
+          specialty: formData.specialty,
+          contact: formData.contact,
+          phone: formData.phone,
+          status: formData.status,
+          patients: formData.patients ? parseInt(formData.patients) : 0,
+          years: formData.years ? parseInt(formData.years) : 0,
+          availability: formData.availability,
+          bio: formData.bio,
+        }),
+      });
+
+      if (!response.ok) {
+        const errorData = await response.json();
+        throw new Error(errorData.detail || "Failed to save doctor");
+      }
+
+      toast.success("Doctor added successfully");
+      // Call onDoctorAdded callback to notify parent
+      if (onDoctorAdded) {
+        onDoctorAdded();
+      }
+    } catch (error) {
+      toast.error(error.message);
+    }
+  };
+
+  const handleCancel = () => {
+    onClose(); // Close the modal instead of navigating
+  };
+
+  return (
+    <div className=" w-full max-w-3xl scrollable">
+      <ToastContainer />
+      <p className="text-gray-600 mb-4">
+        Enter the details of the new doctor. Click save when you&lsquo;re done.
+      </p>
+
+      <form onSubmit={handleSubmit} className="space-y-4">
+        {/* Name & Specialty */}
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+          <div>
+            <label className="block font-medium">Full Name</label>
+            <input
+              type="text"
+              name="name"
+              value={formData.name}
+              onChange={handleChange}
+              placeholder="Enter doctor's name"
+              className="border p-2 rounded w-full"
+              required
+            />
+          </div>
+          <div>
+            <label className="block font-medium">Specialty</label>
+            <select
+              name="specialty"
+              value={formData.specialty}
+              onChange={handleChange}
+              className="border p-2 rounded w-full"
+              required
+            >
+              <option value="">Select specialty</option>
+              <option value="Cardiology">Cardiology</option>
+              <option value="Neurology">Neurology</option>
+              <option value="Orthopedics">Orthopedics</option>
+              <option value="Pediatrics">Pediatrics</option>
+              <option value="Dermatology">Dermatology</option>
+              <option value="Psychiatry">Psychiatry</option>
+              <option value="Ophthalmology">Ophthalmology</option>
+            </select>
+          </div>
+        </div>
+
+        {/* Contact & Phone */}
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+          <div>
+            <label className="block font-medium">Email</label>
+            <input
+              type="email"
+              name="contact"
+              value={formData.contact}
+              onChange={handleChange}
+              placeholder="example@medihub.com"
+              className="border p-2 rounded w-full"
+              required
+            />
+          </div>
+          <div>
+            <label className="block font-medium">Phone Number</label>
+            <input
+              type="text"
+              name="phone"
+              value={formData.phone}
+              onChange={handleChange}
+              placeholder="Enter phone number"
+              className="border p-2 rounded w-full"
+            />
+          </div>
+        </div>
+
+        {/* Status, Patients, Experience */}
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+          <div>
+            <label className="block font-medium">Status</label>
+            <select
+              name="status"
+              value={formData.status}
+              onChange={handleChange}
+              className="border p-2 rounded w-full"
+            >
+              <option value="Active">Active</option>
+              <option value="On Leave">On Leave</option>
+              <option value="Inactive">Inactive</option>
+            </select>
+          </div>
+          <div>
+            <label className="block font-medium">Patients</label>
+            <input
+              type="number"
+              name="patients"
+              value={formData.patients}
+              onChange={handleChange}
+              min="0"
+              className="border p-2 rounded w-full"
+            />
+          </div>
+          <div>
+            <label className="block font-medium">Experience (Years)</label>
+            <input
+              type="number"
+              name="years"
+              value={formData.years}
+              onChange={handleChange}
+              min="0"
+              className="border p-2 rounded w-full"
+            />
+          </div>
+        </div>
+
+        {/* Availability */}
+        <div>
+          <label className="block font-medium">Availability</label>
+          <input
+            type="text"
+            name="availability"
+            value={formData.availability}
+            onChange={handleChange}
+            placeholder="E.g. Mon, Wed, Fri"
+            className="border p-2 rounded w-full"
+          />
+        </div>
+
+        {/* Bio */}
+        <div>
+          <label className="block font-medium">Doctor&rsquo;s Bio</label>
+          <textarea
+            name="bio"
+            value={formData.bio}
+            onChange={handleChange}
+            placeholder="Enter doctor's bio"
+            className="border p-2 rounded w-full h-24"
+          />
+        </div>
+
+        {/* Buttons */}
+        <div className="flex justify-end space-x-2 mt-6">
+          <button
+            type="button"
+            className="bg-gray-500 text-white px-4 py-2 rounded cursor-pointer"
+            onClick={handleCancel}
+          >
+            Close
+          </button>
+
+          <button
+            type="submit"
+            className="bg-black text-white px-4 py-2 rounded cursor-pointer"
+          >
+            Save Doctor
+          </button>
+        </div>
+      </form>
+    </div>
+  );
+};
+AddDoctor.propTypes = {
+  onClose: PropTypes.func.isRequired,
+  onDoctorAdded: PropTypes.func,
+};
+
+export default AddDoctor;

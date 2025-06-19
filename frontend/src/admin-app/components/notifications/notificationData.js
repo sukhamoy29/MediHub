@@ -1,0 +1,60 @@
+const sampleNotifications = [
+  {
+    id: 1,
+    title: "New appointment request",
+    message: "John Smith scheduled for tomorrow at 3:00 PM",
+    category: "Appointments",
+    timestamp: "Apr 21, 2024 at 2:25 PM",
+    isUnread: true,
+  },
+  {
+    id: 2,
+    title: "Payment received",
+    message: "Your payment of $200 has been successfully processed.",
+    category: "Payments",
+    timestamp: "Apr 19, 2024 at 8:30 AM",
+    isUnread: true,
+  },
+  {
+    id: 3,
+    title: "System update",
+    message: "We've updated our terms of service, please review them.",
+    category: "System",
+    timestamp: "Apr 16, 2024 at 6:30 PM",
+    isUnread: false,
+  },
+  {
+    id: 4,
+    title: "Invoice generated",
+    message: "An invoice for your last visit has been generated.",
+    category: "Payments",
+    timestamp: "Apr 18, 2024 at 1:45 PM",
+    isUnread: false,
+  },
+  {
+    id: 5,
+    title: "Medical report ready",
+    message: "Your latest test results are now available in your dashboard.",
+    category: "Medical",
+    timestamp: "Apr 17, 2024 at 10:15 AM",
+    isUnread: false,
+  },
+  {
+    id: 6,
+    title: "System update",
+    message: "We've updated our terms of service, please review them.",
+    category: "System",
+    timestamp: "Apr 16, 2024 at 6:30 PM",
+    isUnread: false,
+  },
+  {
+    id: 7,
+    title: "System update",
+    message: "We've updated our terms of service, please review them.",
+    category: "System",
+    timestamp: "Apr 25, 2024 at 6:30 PM",
+    isUnread: false,
+  },
+];
+
+export default sampleNotifications;
