@@ -37,12 +37,18 @@ MediHub is a comprehensive healthcare management platform that connects patients
 
 ### Backend
 
-- **FastAPI** - Modern, fast web framework for Python
-- **SQLAlchemy** - SQL toolkit and ORM
-- **MySQL** - Database management
-- **Razorpay** - Payment gateway integration
+
+- **FastAPI 🚀** - Modern, fast web framework for Python
+- **SQLAlchemy 🗄️** - SQL toolkit and ORM
+- **MySQL 🐬** - Database management
+- **Razorpay 💳** - Payment gateway integration
 - **JWT** - Secure authentication
-- **Uvicorn** - ASGI server
+- **Uvicorn 🏃‍♂️** - ASGI server
+- **Python-Multipart 📦** – Enables FastAPI to handle form data and file uploads.
+- **Python-Dotenv 🌿** – Loads environment variables from a .env file for secure config management.
+- **Passlib 🔐** – Library for securely hashing and verifying passwords.
+- **Python-JOSE 🔏** – A JWT library for creating and verifying access tokens using JSON Web Signature (JWS) and JSON Web Encryption (JWE).
+  
 
 ## 🚀 Getting Started
 
@@ -207,35 +213,7 @@ The project is a full-stack web application with a React-based frontend and a Fa
 - 🏥 **Clinic Profile Management:** Manage clinic details and information.
 - 📝 **Site Feedback & Contact Requests:** Easy communication channels for users.
 
----
 
-## 🛠️ Technologies Used
-
-### Backend
-
-- FastAPI 🚀
-- Uvicorn 🏃‍♂️
-- SQLAlchemy 🗄️
-- MySQL 🐬
-- Passlib 🔐
-- Python-JOSE 🔏
-- Razorpay 💳
-- Python-Multipart 📦
-- Python-Dotenv 🌿
-
-### Frontend
-
-- React 18 ⚛️
-- Vite ⚡
-- React Router DOM 🛣️
-- Axios 📡
-- TailwindCSS 🎨
-- React Toastify 🔔
-- Framer Motion 🎞️
-- Recharts 📊
-- Lucide React & React Icons 🎭
-
----
 
 ## 💡 Additional Insights
 
