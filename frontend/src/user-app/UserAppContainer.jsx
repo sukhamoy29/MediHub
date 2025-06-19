@@ -13,7 +13,7 @@ import Footer from "./Header_components/herosection/Footer";
 import ScrollToTop from "./ScrollToTop";
 import LoginPage from "./Authentication/LoginPage";
 // import BookingPage from "./Authentication/BookingPage";
-import Signup from "./Authentication/Signup";
+import SignUp from "./Authentication/SignUp";
 import ForgotPassword from "./Authentication/ForgotPasswordFlow";
 import Dashboard from "./afterlogin_dasboard/Dashboard";
 import FeedbackForm from "./components/FeedbackForm";
@@ -47,7 +47,7 @@ const AppContent = () => {
             <Route path="/clinic-details/:id" element={<ClinicDetailsPage />} />
 
             {/* Auth Routes */}
-            <Route path="/signup" element={<Signup />} />
+            <Route path="/signup" element={<SignUp />} />
             <Route path="/login" element={<LoginPage />} />
             <Route path="/forgotpassword" element={<ForgotPassword />} />
 

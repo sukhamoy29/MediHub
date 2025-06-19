@@ -3,7 +3,7 @@ import UserAppContainer from "./user-app/UserAppContainer";
 import AdminAppContainer from "./admin-app/AdminAppContainer";
 import { AuthProvider } from "./user-app/context/AuthContextProvider";
 import ProtectedRoute from "./user-app/context/ProtectedRoute";
-import Signup from "./user-app/Authentication/Signup";
+import SignUp from "./user-app/Authentication/SignUp";
 import AuthPage from "./user-app/Authentication/LoginPage";
 import Dashboard from "./user-app/afterlogin_dasboard/Dashboard";
 import DAppointmentHistory from "./user-app/afterlogin_dasboard/dappointmenthistory/DAppointmentHistory";
@@ -19,7 +19,7 @@ const App = () => {
         <ToastContainer />
         <Routes>
           {/* Public Routes */}
-          <Route path="/signup" element={<Signup />} />
+          <Route path="/signup" element={<SignUp />} />
           <Route path="/AuthPage" element={<AuthPage />} />
 
           {/* Doctor/Admin Protected Routes */}
