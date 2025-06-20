@@ -22,9 +22,9 @@ import DAppointmentHistory from "./afterlogin_dasboard/dappointmenthistory/DAppo
 import ClinicPage from "./pages/ClinicPage";
 import ClinicDetailsPage from "./pages/ClinicDetailsPage";
 import PaymentPage from "./components/clinic/paymentSection/PaymentPage";
-import AppointmentConfirmed from "./components/clinic/paymentsection/AppointmentConfirmed";
-import Invoice from "./components/clinic/paymentsection/Invoice";
-import BookAppointment from "./components/clinic/paymentsection/BookAppointment";
+import AppointmentConfirmed from "./components/clinic/paymentSection/AppointmentConfirmed";
+import Invoice from "./components/clinic/paymentSection/Invoice";
+import BookAppointment from "./components/clinic/paymentSection/BookAppointment";
 
 const AppContent = () => {
   const location = useLocation();
