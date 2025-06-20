@@ -1,17 +1,18 @@
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
-from routers.auth import router as auth_router
-from routers.users import router as users_router
-from routers.doctors import router as doctors_router
-from routers.appointment import router as appointment_router
-from routers.profile import router as profile_router
-from routers.payments import router as payments_router
-from routers.clinic_profile import router as clinic_profile_router
-from routers.site_feedback import router as site_feedback_router
-from routers.contact_request import router as contact_request_router
-from routers.user_payment import router as user_payment_router
-from routers.razorpay_client import router as razorpay_client_router
-from database import Base, engine, get_db
+from .routers.auth import router as auth_router
+from .routers.users import router as users_router
+from .routers.doctors import router as doctors_router
+from .routers.appointment import router as appointment_router
+from .routers.profile import router as profile_router
+from .routers.payments import router as payments_router
+from .routers.clinic_profile import router as clinic_profile_router
+from .routers.site_feedback import router as site_feedback_router
+from .routers.contact_request import router as contact_request_router
+from .routers.user_payment import router as user_payment_router
+from .routers.razorpay_client import router as razorpay_client_router
+
+from .database import Base, engine
 
 Base.metadata.create_all(bind=engine)
 
@@ -21,7 +22,7 @@ print("Registering routers...")
 
 app.add_middleware(
     CORSMiddleware,
-   allow_origins=["https://medi-hub-three.vercel.app/", "http://localhost:3000"], 
+   allow_origins=["http://localhost:5173"], 
     allow_credentials=True,
     allow_methods=["*"],
     allow_headers=["*"],
@@ -37,6 +38,7 @@ print("Registered appointment_router")
 
 app.include_router(doctors_router, prefix="/api/doctors", tags=["Doctors"])
 print("Registered doctors_router")
+
 app.include_router(payments_router, prefix="/api/payments", tags=["Payments"])
 print("Registered payments_router")
 
