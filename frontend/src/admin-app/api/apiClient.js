@@ -1,7 +1,7 @@
 import axios from "axios";
 
 const apiClient = axios.create({
-  baseURL: "http://localhost:8000", // Set this to your backend API URL
+  baseURL: import.meta.env.VITE_API_URL, // Use env variable
 });
 
 apiClient.interceptors.request.use(
