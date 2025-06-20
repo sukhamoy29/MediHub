@@ -1,18 +1,17 @@
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 from routers.auth import router as auth_router
-from backend.routers.users import router as users_router
-from backend.routers.doctors import router as doctors_router
-from backend.routers.appointment import router as appointment_router
-from backend.routers.profile import router as profile_router
-from backend.routers.payments import router as payments_router
-from backend.routers.clinic_profile import router as clinic_profile_router
-from backend.routers.site_feedback import router as site_feedback_router
-from backend.routers.contact_request import router as contact_request_router
-from backend.routers.user_payment import router as user_payment_router
-from backend.routers.razorpay_client import router as razorpay_client_router
-
-from backend.database import Base, engine
+from routers.users import router as users_router
+from routers.doctors import router as doctors_router
+from routers.appointment import router as appointment_router
+from routers.profile import router as profile_router
+from routers.payments import router as payments_router
+from routers.clinic_profile import router as clinic_profile_router
+from routers.site_feedback import router as site_feedback_router
+from routers.contact_request import router as contact_request_router
+from routers.user_payment import router as user_payment_router
+from routers.razorpay_client import router as razorpay_client_router
+from database import Base, engine, get_db
 
 Base.metadata.create_all(bind=engine)
 
@@ -38,7 +37,6 @@ print("Registered appointment_router")
 
 app.include_router(doctors_router, prefix="/api/doctors", tags=["Doctors"])
 print("Registered doctors_router")
-
 app.include_router(payments_router, prefix="/api/payments", tags=["Payments"])
 print("Registered payments_router")
 
